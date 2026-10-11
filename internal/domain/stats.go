@@ -1,4 +1,4 @@
-package serverplate
+package domain
 
 type Stats struct {
 	DatabaseSizeBytes int64

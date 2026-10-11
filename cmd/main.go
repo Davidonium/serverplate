@@ -18,8 +18,8 @@ import (
 
 	embed "github.com/davidonium/serverplate"
 	"github.com/davidonium/serverplate/internal/bg"
+	"github.com/davidonium/serverplate/internal/domain"
 	"github.com/davidonium/serverplate/internal/env"
-	"github.com/davidonium/serverplate/internal/serverplate"
 	"github.com/davidonium/serverplate/internal/server"
 	"github.com/davidonium/serverplate/internal/store/sqlitestore"
 	"github.com/davidonium/serverplate/internal/vite"
@@ -114,7 +114,7 @@ func runServer(logger *slog.Logger, cfg env.Config) error {
 	pairStore := sqlitestore.NewPairStore(db)
 	bucketStore := sqlitestore.NewBucketStore(logger, db)
 
-	generator := serverplate.NewGenerator(pairStore)
+	generator := domain.NewGenerator(pairStore)
 
 	runner := bg.NewRunner(logger, bucketStore)
 	runner.Start()

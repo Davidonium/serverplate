@@ -1,10 +1,10 @@
-package serverplate_test
+package domain_test
 
 import (
 	"fmt"
 	"testing"
 
-	"github.com/davidonium/serverplate/internal/serverplate"
+	"github.com/davidonium/serverplate/internal/domain"
 )
 
 func TestValidateNameTable(t *testing.T) {
@@ -40,7 +40,7 @@ func TestValidateNameTable(t *testing.T) {
 
 	for i, tt := range cases {
 		t.Run(fmt.Sprintf("Test Case #%d", i), func(t *testing.T) {
-			ok := serverplate.ValidateName(tt.Input)
+			ok := domain.ValidateName(tt.Input)
 			if ok != tt.Valid {
 				t.Errorf("ValidateName() = input: %q - got %v, want %v", tt.Input, ok, tt.Valid)
 			}
@@ -93,7 +93,7 @@ func TestValidateNameSegmentTable(t *testing.T) {
 
 	for i, tt := range cases {
 		t.Run(fmt.Sprintf("Test Case #%d", i), func(t *testing.T) {
-			ok := serverplate.ValidateNameSegment(tt.Input)
+			ok := domain.ValidateNameSegment(tt.Input)
 			if ok != tt.Valid {
 				t.Errorf(
 					"ValidateNameSegment() = input: %q - got %v, want %v",

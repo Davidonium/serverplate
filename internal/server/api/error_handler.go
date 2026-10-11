@@ -27,7 +27,10 @@ func RequestErrorHandler() func(w http.ResponseWriter, r *http.Request, err erro
 //
 // In debug mode, the detail field includes the error message and type.
 // In production mode, a generic error message is returned to avoid leaking implementation details.
-func ErrorHandler(logger *slog.Logger, debug bool) func(w http.ResponseWriter, r *http.Request, err error) {
+func ErrorHandler(
+	logger *slog.Logger,
+	debug bool,
+) func(w http.ResponseWriter, r *http.Request, err error) {
 	return func(w http.ResponseWriter, r *http.Request, err error) {
 		logger.Error("error serving API request",
 			slog.Any("err", err),

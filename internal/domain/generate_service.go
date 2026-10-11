@@ -1,4 +1,4 @@
-package serverplate
+package domain
 
 import (
 	"context"

@@ -6,7 +6,7 @@ import (
 	"log/slog"
 	"net/http"
 
-	domain "github.com/davidonium/serverplate/internal/serverplate"
+	domain "github.com/davidonium/serverplate/internal/domain"
 	"github.com/davidonium/serverplate/internal/templates"
 )
 
@@ -79,6 +79,5 @@ func WebErrorHandler(logger *slog.Logger, debug bool) ErrorHandler {
 			}
 			return
 		}
-
 	}
 }

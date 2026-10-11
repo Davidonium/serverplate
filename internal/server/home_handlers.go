@@ -4,14 +4,14 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/davidonium/serverplate/internal/serverplate"
+	"github.com/davidonium/serverplate/internal/domain"
 	"github.com/davidonium/serverplate/internal/templates"
 )
 
-func homeHandler(pairStore serverplate.PairStore) appHandlerFunc {
+func homeHandler(pairStore domain.PairStore) appHandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) error {
 		ctx := r.Context()
-		stats, err := pairStore.Stats(ctx, serverplate.RandomPairFilters{})
+		stats, err := pairStore.Stats(ctx, domain.RandomPairFilters{})
 		if err != nil {
 			return err
 		}
@@ -23,17 +23,17 @@ func homeHandler(pairStore serverplate.PairStore) appHandlerFunc {
 	}
 }
 
-func configStatsHandler(pairStore serverplate.PairStore) appHandlerFunc {
+func configStatsHandler(pairStore domain.PairStore) appHandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) error {
 		ctx := r.Context()
 		lengthEnabled := r.FormValue("length_enabled") == "on"
 		lengthMode := r.FormValue("length_mode")
 		lengthValue, _ := strconv.Atoi(r.FormValue("length_value"))
 
-		filters := serverplate.RandomPairFilters{}
+		filters := domain.RandomPairFilters{}
 		if lengthEnabled {
 			filters.Length = lengthValue
-			filters.LengthMode = serverplate.LengthMode(lengthMode)
+			filters.LengthMode = domain.LengthMode(lengthMode)
 		}
 
 		stats, err := pairStore.Stats(ctx, filters)

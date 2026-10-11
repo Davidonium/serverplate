@@ -7,8 +7,8 @@ import (
 
 	"github.com/a-h/templ"
 
+	"github.com/davidonium/serverplate/internal/domain"
 	"github.com/davidonium/serverplate/internal/env"
-	"github.com/davidonium/serverplate/internal/serverplate"
 	"github.com/davidonium/serverplate/internal/server/api"
 	"github.com/davidonium/serverplate/internal/vite"
 )
@@ -17,9 +17,9 @@ type Services struct {
 	Logger      *slog.Logger
 	Config      env.Config
 	Assets      *vite.Assets
-	Generator   *serverplate.Generator
-	PairStore   serverplate.PairStore
-	BucketStore serverplate.BucketStore
+	Generator   *domain.Generator
+	PairStore   domain.PairStore
+	BucketStore domain.BucketStore
 }
 
 func New(svcs *Services) *http.Server {

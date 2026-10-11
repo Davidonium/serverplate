@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/davidonium/serverplate/internal/dbtesting"
-	"github.com/davidonium/serverplate/internal/serverplate"
+	"github.com/davidonium/serverplate/internal/domain"
 	"github.com/davidonium/serverplate/internal/store/sqlitestore"
 )
 
@@ -16,7 +16,7 @@ func TestBucketStore(t *testing.T) {
 		logger := slog.New(slog.DiscardHandler)
 		store := sqlitestore.NewBucketStore(logger, pool)
 
-		b := &serverplate.Bucket{
+		b := &domain.Bucket{
 			Name: "test-bucket",
 		}
 
