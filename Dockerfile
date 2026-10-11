@@ -12,7 +12,7 @@ WORKDIR /app/frontend
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 RUN pnpm run build
 
-FROM docker.io/library/golang:1.25 AS builder
+FROM docker.io/library/golang:1.27 AS builder
 
 WORKDIR /app
 
@@ -20,14 +20,19 @@ COPY go.* ./
 
 RUN go mod download
 
+COPY mise.toml .
+
+COPY --from=ghcr.io/jdx/mise:2026.10.8 /usr/local/bin/mise /usr/local/bin/mise
+
+RUN mise trust /app && mise install
+
 COPY ./cmd ./cmd
 COPY ./internal ./internal
 COPY ./db/ ./db
 COPY --from=frontend /app/frontend/dist /app/frontend/dist
 COPY embed.go .
-COPY please .
 
-RUN ./please build
+RUN mise run build
 
 FROM gcr.io/distroless/static-debian13:nonroot
 
