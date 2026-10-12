@@ -11,15 +11,16 @@ export default defineConfig({
   },
   build: {
     manifest: true,
-    rollupOptions: {
+    rolldownOptions: {
       input: "./src/js/entries/app.js",
       // remove eval warning when compiling the application because htmx uses it and there's no plan to not using it.
       // see https://github.com/bigskysoftware/htmx/pull/1988#issuecomment-1806290317
       onwarn: (entry, next) => {
         if (
-          entry.loc?.file &&
-          /htmx\.esm\.js$/.test(entry.loc.file) &&
-          /Use of eval in/.test(entry.message)
+          (entry.loc?.file &&
+            /htmx\.esm\.js$/.test(entry.loc.file) &&
+            /Use of eval in/.test(entry.message)) ||
+          (entry.code === "EVAL" && /htmx/.test(entry.id ?? ""))
         )
           return;
         return next(entry);

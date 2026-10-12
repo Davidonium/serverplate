@@ -6,7 +6,7 @@ go = "1.27"
 golangci-lint = "2.14.0"
 oapi-codegen = "2.6.0"
 node = "24"
-pnpm = "9.15.1"
+pnpm = "12.11.2"
 
 [vars]
 app_version = "0.1.0"
