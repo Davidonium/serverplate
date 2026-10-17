@@ -6,7 +6,11 @@ import (
 	"errors"
 	"fmt"
 	"log/slog"
+	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	"github.com/amacneil/dbmate/v2/pkg/dbmate"
 	_ "github.com/amacneil/dbmate/v2/pkg/driver/sqlite"
@@ -70,8 +74,13 @@ func run(args []string) error {
 	return fmt.Errorf("unknown command %q", args[1])
 }
 
+// shutdownTimeout bounds how long the server and the cron runner are given to
+// finish in-flight work after a termination signal is received.
+const shutdownTimeout = 15 * time.Second
+
 func runServer(logger *slog.Logger, cfg env.Config) error {
-	ctx := context.Background()
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
 
 	db, err := sqlitestore.Connect(ctx, cfg.DatabaseURL.String())
 	if err != nil {
@@ -129,9 +138,38 @@ func runServer(logger *slog.Logger, cfg env.Config) error {
 	})
 
 	logger.Info("starting http server", "addr", s.Addr)
-	if err := s.ListenAndServe(); err != nil {
-		return fmt.Errorf("failed to start the http server: %w", err)
+
+	errCh := make(chan error, 1)
+	go func() {
+		if err := s.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+			errCh <- fmt.Errorf("failed to start the http server: %w", err)
+			return
+		}
+		errCh <- nil
+	}()
+
+	select {
+	case err := <-errCh:
+		return err
+	case <-ctx.Done():
+		// Restore the default signal behavior so that a second signal
+		// terminates the process immediately while we drain.
+		stop()
+		logger.Info("shutdown signal received, draining")
 	}
+
+	shutdownCtx, cancel := context.WithTimeout(context.Background(), shutdownTimeout)
+	defer cancel()
+
+	if err := s.Shutdown(shutdownCtx); err != nil {
+		logger.Error("failed to gracefully shut down the http server", "error", err)
+	}
+
+	if err := runner.Stop(shutdownCtx); err != nil {
+		logger.Error("failed to gracefully shut down the cron runner", "error", err)
+	}
+
+	logger.Info("shutdown complete")
 
 	return nil
 }

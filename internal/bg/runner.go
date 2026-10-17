@@ -64,6 +64,19 @@ func (r *Runner) Start() {
 	r.cron.Start()
 }
 
+// Stop stops scheduling new tasks and waits for the currently running task to
+// finish, or until ctx is done.
+func (r *Runner) Stop(ctx context.Context) error {
+	done := r.cron.Stop()
+
+	select {
+	case <-done.Done():
+		return nil
+	case <-ctx.Done():
+		return ctx.Err()
+	}
+}
+
 type cronLogger struct {
 	*slog.Logger
 }

@@ -13,6 +13,13 @@ import (
 	"github.com/davidonium/serverplate/internal/vite"
 )
 
+const (
+	readHeaderTimeout = 3 * time.Second
+	readTimeout       = 10 * time.Second
+	writeTimeout      = 10 * time.Second
+	idleTimeout       = 120 * time.Second
+)
+
 type Services struct {
 	Logger      *slog.Logger
 	Config      env.Config
@@ -39,7 +46,10 @@ func New(svcs *Services) *http.Server {
 	return &http.Server{
 		Addr:              svcs.Config.ListenAddr,
 		Handler:           m,
-		ReadHeaderTimeout: 3 * time.Second,
+		ReadHeaderTimeout: readHeaderTimeout,
+		ReadTimeout:       readTimeout,
+		WriteTimeout:      writeTimeout,
+		IdleTimeout:       idleTimeout,
 	}
 }
 
