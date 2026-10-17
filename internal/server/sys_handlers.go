@@ -19,7 +19,7 @@ func healthHandler() http.Handler {
 
 func openapiHandler(logger *slog.Logger) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		spec, err := api.GetSwagger()
+		spec, err := api.GetSpec()
 		if err != nil {
 			logger.Error("failed to load OpenAPI spec",
 				slog.Any("err", err),
