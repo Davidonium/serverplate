@@ -1,6 +1,6 @@
 [tools]
 air = "1.64.5"
-"aqua:a-h/templ" = "0.3.1001"
+"aqua:a-h/templ" = "0.3.1070"
 dbmate = "2.31.0"
 go = "1.27"
 golangci-lint = "2.14.0"

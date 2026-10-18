@@ -3,7 +3,7 @@ module github.com/davidonium/serverplate
 go 1.27
 
 require (
-	github.com/a-h/templ v0.3.1001
+	github.com/a-h/templ v0.3.1070
 	github.com/amacneil/dbmate/v2 v2.26.0
 	github.com/caarlos0/env/v11 v11.3.1
 	github.com/doug-martin/goqu/v9 v9.19.0
@@ -23,7 +23,6 @@ require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/go-openapi/jsonpointer v0.22.5 // indirect
 	github.com/go-openapi/swag/jsonname v0.25.5 // indirect
-	github.com/google/go-cmp v0.7.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/kr/pretty v0.3.1 // indirect
 	github.com/lib/pq v1.10.9 // indirect
