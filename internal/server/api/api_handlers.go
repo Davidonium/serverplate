@@ -174,7 +174,7 @@ func (s *Handlers) ListBuckets(
 		return nil, err
 	}
 
-	var items []BucketListItem
+	items := make([]BucketListItem, 0, len(buckets))
 	for _, b := range buckets {
 		items = append(items, BucketListItem{
 			Id:          b.ID,
