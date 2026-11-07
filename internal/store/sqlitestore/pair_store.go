@@ -93,7 +93,6 @@ func (s *PairStore) Stats(
 		return domain.Stats{}, err
 	}
 
-	// Query database size
 	var dbSizeRow struct {
 		Size int64 `db:"size"`
 	}
